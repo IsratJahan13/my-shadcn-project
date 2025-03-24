@@ -5,22 +5,29 @@ import CardsPage from "./pages/CardsPage"
 import FormPage from "./pages/FormPage"
 import HomePage from "./pages/HomePage"
 import './index.css'
+import Footer from "./components/Footer"
 
 function App() {
   
 
   return (
     <>
-      <h1 className="text-3xl font-bold text-red-500">Hello, Tailwind!</h1>
       <Router>
+      <div className="min-h-screen flex flex-col bg-gray-100">
         <Navbar />
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/table" element={<TablePage />} />
-          <Route path="/cards" element={<CardsPage />}/>
-          <Route path="/form" element={<FormPage />}/>
-        </Routes>
-      </Router>
+        
+        <main className="flex-grow container mx-auto pt-16">
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/table" element={<TablePage />} />
+            <Route path="/cards" element={<CardsPage />} />
+            <Route path="/form" element={<FormPage />} />
+          </Routes>
+        </main>
+
+        <Footer />
+      </div>
+    </Router>
     </>
   )
 }
