@@ -5,17 +5,21 @@ import { zodResolver } from '../../node_modules/@hookform/resolvers/zod/src/zod'
 import * as z from "zod"
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
+import { Calendar } from "@/components/ui/calendar"
+import { format } from "date-fns"
 
 // Define validation schema
 const formSchema = z.object({
     name: z.string().min(2, { message: "Name must be at least 2 characters" }),
     terms: z.boolean().refine((value) => value === true, { message: "You must accept the terms" }),
+    dateOfBirth: z.date({ required_error: "Please select a date" }),
   });
   
   export default function FormPage() {
     const form = useForm({
       resolver: zodResolver(formSchema),
-      defaultValues: { name: "", terms: false },
+      defaultValues: { name: "", terms: false, dateOfBirth: undefined },
     });
   
     function onSubmit(values: z.infer<typeof formSchema>) {
@@ -42,6 +46,7 @@ const formSchema = z.object({
                 </FormItem>
               )}
             />
+
             {/* Checkbox Field */}
           <FormField
             control={form.control}
@@ -56,6 +61,36 @@ const formSchema = z.object({
               </FormItem>
             )}
           />
+
+          {/* Date Picker Field */}
+          <FormField
+            control={form.control}
+            name="dateOfBirth"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Date of Birth</FormLabel>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <FormControl>
+                      <Button variant="outline" className="w-full">
+                        {field.value ? format(field.value, "PPP") : "Pick a date"}
+                      </Button>
+                    </FormControl>
+                  </PopoverTrigger>
+                  <PopoverContent className="p-0">
+                    <Calendar
+                      mode="single"
+                      selected={field.value}
+                      onSelect={field.onChange}
+                      initialFocus
+                    />
+                  </PopoverContent>
+                </Popover>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
   
             {/* Submit Button */}
             <Button type="submit" className="w-full">Submit</Button>
