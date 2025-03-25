@@ -9,6 +9,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { Calendar } from "@/components/ui/calendar"
 import { format } from "date-fns"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
 // Define validation schema
 const formSchema = z.object({
@@ -16,12 +17,13 @@ const formSchema = z.object({
     terms: z.boolean().refine((value) => value === true, { message: "You must accept the terms" }),
     dateOfBirth: z.date({ required_error: "Please select a date" }),
     gender: z.enum(["male", "female", "other"], { message: "Please select a gender" }),
+    country: z.string().min(1, { message: "Please select a country" }),
   });
   
   export default function FormPage() {
     const form = useForm({
       resolver: zodResolver(formSchema),
-      defaultValues: { name: "", terms: false, dateOfBirth: undefined, gender: undefined },
+      defaultValues: { name: "", terms: false, dateOfBirth: undefined, gender: undefined, country: "",  },
     });
   
     function onSubmit(values: z.infer<typeof formSchema>) {
@@ -127,6 +129,30 @@ const formSchema = z.object({
                       <FormLabel>Other</FormLabel>
                     </FormItem>
                   </RadioGroup>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+            {/* Select Field */}
+          <FormField
+            control={form.control}
+            name="country"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Country</FormLabel>
+                <FormControl>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select a country" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="usa">United States</SelectItem>
+                      <SelectItem value="canada">Canada</SelectItem>
+                      <SelectItem value="uk">United Kingdom</SelectItem>
+                    </SelectContent>
+                  </Select>
                 </FormControl>
                 <FormMessage />
               </FormItem>
