@@ -4,16 +4,18 @@ import { useForm } from "react-hook-form"
 import { zodResolver } from '../../node_modules/@hookform/resolvers/zod/src/zod'
 import * as z from "zod"
 import { Button } from "@/components/ui/button"
+import { Checkbox } from "@/components/ui/checkbox"
 
 // Define validation schema
 const formSchema = z.object({
     name: z.string().min(2, { message: "Name must be at least 2 characters" }),
+    terms: z.boolean().refine((value) => value === true, { message: "You must accept the terms" }),
   });
   
   export default function FormPage() {
     const form = useForm({
       resolver: zodResolver(formSchema),
-      defaultValues: { name: "" },
+      defaultValues: { name: "", terms: false },
     });
   
     function onSubmit(values: z.infer<typeof formSchema>) {
@@ -40,6 +42,20 @@ const formSchema = z.object({
                 </FormItem>
               )}
             />
+            {/* Checkbox Field */}
+          <FormField
+            control={form.control}
+            name="terms"
+            render={({ field }) => (
+              <FormItem className="flex items-center space-x-2">
+                <FormControl>
+                  <Checkbox checked={field.value} onCheckedChange={field.onChange} />
+                </FormControl>
+                <FormLabel className="text-sm">Accept Terms & Conditions</FormLabel>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
   
             {/* Submit Button */}
             <Button type="submit" className="w-full">Submit</Button>
