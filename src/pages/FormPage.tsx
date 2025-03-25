@@ -8,18 +8,20 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { Calendar } from "@/components/ui/calendar"
 import { format } from "date-fns"
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 
 // Define validation schema
 const formSchema = z.object({
     name: z.string().min(2, { message: "Name must be at least 2 characters" }),
     terms: z.boolean().refine((value) => value === true, { message: "You must accept the terms" }),
     dateOfBirth: z.date({ required_error: "Please select a date" }),
+    gender: z.enum(["male", "female", "other"], { message: "Please select a gender" }),
   });
   
   export default function FormPage() {
     const form = useForm({
       resolver: zodResolver(formSchema),
-      defaultValues: { name: "", terms: false, dateOfBirth: undefined },
+      defaultValues: { name: "", terms: false, dateOfBirth: undefined, gender: undefined },
     });
   
     function onSubmit(values: z.infer<typeof formSchema>) {
@@ -91,7 +93,46 @@ const formSchema = z.object({
             )}
           />
 
-  
+            {/* Radio Group */}
+          <FormField
+            control={form.control}
+            name="gender"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Gender</FormLabel>
+                <FormControl>
+                  <RadioGroup
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                    className="flex space-x-4"
+                  >
+                    <FormItem className="flex items-center space-x-2">
+                      <FormControl>
+                        <RadioGroupItem value="male" />
+                      </FormControl>
+                      <FormLabel>Male</FormLabel>
+                    </FormItem>
+
+                    <FormItem className="flex items-center space-x-2">
+                      <FormControl>
+                        <RadioGroupItem value="female" />
+                      </FormControl>
+                      <FormLabel>Female</FormLabel>
+                    </FormItem>
+
+                    <FormItem className="flex items-center space-x-2">
+                      <FormControl>
+                        <RadioGroupItem value="other" />
+                      </FormControl>
+                      <FormLabel>Other</FormLabel>
+                    </FormItem>
+                  </RadioGroup>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
             {/* Submit Button */}
             <Button type="submit" className="w-full">Submit</Button>
           </form>
