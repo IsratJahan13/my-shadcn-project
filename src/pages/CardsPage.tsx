@@ -76,7 +76,7 @@ import { cn } from "@/lib/utils"
       </CardContent>
       <CardFooter className="flex justify-between">
         <Button variant="outline">Cancel</Button>
-        <Button>Deploy</Button>
+        <Button className="bg-blue-500 hover:bg-blue-600">Deploy</Button>
       </CardFooter>
     </Card>
       <Card className={cn("w-[380px]", className)} {...props}>
@@ -117,7 +117,7 @@ import { cn } from "@/lib/utils"
           </div>
         </CardContent>
         <CardFooter>
-          <Button className="w-full">
+          <Button className="w-full bg-blue-500 hover:bg-blue-600">
              Mark all as read
           </Button>
         </CardFooter>

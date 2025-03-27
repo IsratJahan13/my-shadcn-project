@@ -10,6 +10,7 @@ import { Calendar } from "@/components/ui/calendar"
 import { format } from "date-fns"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Switch } from "@/components/ui/switch"
 
 // Define validation schema
 const formSchema = z.object({
@@ -18,12 +19,13 @@ const formSchema = z.object({
     dateOfBirth: z.date({ required_error: "Please select a date" }),
     gender: z.enum(["male", "female", "other"], { message: "Please select a gender" }),
     country: z.string().min(1, { message: "Please select a country" }),
+    notifications: z.boolean(),
   });
   
   export default function FormPage() {
     const form = useForm({
       resolver: zodResolver(formSchema),
-      defaultValues: { name: "", terms: false, dateOfBirth: undefined, gender: undefined, country: "",  },
+      defaultValues: { name: "", terms: false, dateOfBirth: undefined, gender: undefined, country: "", notifications: false },
     });
   
     function onSubmit(values: z.infer<typeof formSchema>) {
@@ -159,8 +161,23 @@ const formSchema = z.object({
             )}
           />
 
+          {/* Switch Field */}
+          <FormField
+            control={form.control}
+            name="notifications"
+            render={({ field }) => (
+              <FormItem className="flex items-center space-x-2">
+                <FormControl>
+                  <Switch checked={field.value} onCheckedChange={field.onChange} />
+                </FormControl>
+                <FormLabel className="text-sm">Enable Notifications</FormLabel>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
             {/* Submit Button */}
-            <Button type="submit" className="w-full">Submit</Button>
+            <Button type="submit" className="w-full bg-blue-500 hover:bg-blue-600">Submit</Button>
           </form>
         </Form>
       </div>
